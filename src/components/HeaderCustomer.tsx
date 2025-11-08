@@ -19,6 +19,7 @@ import { useUserStore } from "@/stores/user-store";
 import { useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useSearchStore } from "@/stores/search-store";
+import CartPopover from "./CartPopover";
 
 export default function HeaderCustomer() {
     const [searchValue, setSearchValue] = useState("");
@@ -107,21 +108,10 @@ export default function HeaderCustomer() {
                     </button>
 
                     <Link
-                        href="/cart"
+                        href="#"
                         className="relative flex flex-col items-center group transition-colors duration-200"
                     >
-                        <div className="relative">
-                            <ShoppingCart
-                                size={26}
-                                className="group-hover:text-blue-600 transition-colors"
-                            />
-                            <span className="absolute -top-4 -right-3 bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full py-0.5">
-                                12
-                            </span>
-                        </div>
-                        <span className="hidden sm:block text-sm font-medium mt-1 mr-1 group-hover:text-blue-600 transition-colors">
-                            Giỏ hàng
-                        </span>
+                        <CartPopover />
                     </Link>
 
                     <DropdownMenu>

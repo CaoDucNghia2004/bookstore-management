@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Pagination,
@@ -30,7 +31,6 @@ export default function ProductList({ filters }: ProductListProps) {
     const [pageSize] = useState(10);
     const [sortQuery, setSortQuery] = useState("sold,desc");
 
-    // Build query chuẩn format backend DSL
     let query = `page=${page}&size=${pageSize}`;
     const { category, price_min, price_max, searchTerm } = filters.filter;
     const filterParts: string[] = [];
@@ -59,13 +59,22 @@ export default function ProductList({ filters }: ProductListProps) {
     query += `&sort=${sortQuery}`;
 
     const { data, isLoading, isError, refetch } = useProducts(query);
-
     const products = data?.payload?.data?.result || [];
     const meta = data?.payload?.data?.meta;
 
     useEffect(() => {
         refetch();
     }, [query, refetch]);
+
+    const createSlug = (text: string) => {
+        return text
+            .toLowerCase()
+            .normalize("NFD") // bỏ dấu tiếng Việt
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+    };
 
     if (isLoading)
         return (
@@ -132,43 +141,49 @@ export default function ProductList({ filters }: ProductListProps) {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {products.map((product: any) => (
-                    <div
-                        key={product.id}
-                        className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden group"
-                    >
-                        <div className="relative w-full h-56 sm:h-60">
-                            <Image
-                                src={
-                                    product?.thumbnail
-                                        ? `${
-                                              process.env
-                                                  .NEXT_PUBLIC_API_ENDPOINT
-                                          }/storage/product/${product.thumbnail.replace(
-                                              /^\/+/,
-                                              ""
-                                          )}`
-                                        : "/images/placeholder.jpg"
-                                }
-                                alt={product.name || "Product image"}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                unoptimized
-                            />
-                        </div>
-                        <div className="p-3 sm:p-4">
-                            <h3 className="font-semibold text-gray-800 line-clamp-2 text-sm sm:text-base">
-                                {product.name}
-                            </h3>
-                            <p className="text-red-600 font-bold mt-2 text-sm sm:text-base">
-                                {product.price?.toLocaleString()} ₫
-                            </p>
-                            <p className="text-xs sm:text-sm text-gray-500">
-                                Đã bán {product.sold}
-                            </p>
-                        </div>
-                    </div>
-                ))}
+                {products.map((product: any) => {
+                    const slug = createSlug(product.name);
+                    const productUrl = `/product/${slug}?id=${product.id}`;
+
+                    return (
+                        <Link
+                            href={productUrl}
+                            key={product.id}
+                            className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden group"
+                        >
+                            <div className="relative w-full h-56 sm:h-60">
+                                <Image
+                                    src={
+                                        product?.thumbnail
+                                            ? `${
+                                                  process.env
+                                                      .NEXT_PUBLIC_API_ENDPOINT
+                                              }/storage/product/${product.thumbnail.replace(
+                                                  /^\/+/,
+                                                  ""
+                                              )}`
+                                            : "/images/placeholder.jpg"
+                                    }
+                                    alt={product.name || "Product image"}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    unoptimized
+                                />
+                            </div>
+                            <div className="p-3 sm:p-4">
+                                <h3 className="font-semibold text-gray-800 line-clamp-2 text-sm sm:text-base group-hover:text-blue-600 transition">
+                                    {product.name}
+                                </h3>
+                                <p className="text-red-600 font-bold mt-2 text-sm sm:text-base">
+                                    {product.price?.toLocaleString()} ₫
+                                </p>
+                                <p className="text-xs sm:text-sm text-gray-500">
+                                    Đã bán {product.sold}
+                                </p>
+                            </div>
+                        </Link>
+                    );
+                })}
 
                 {products.length === 0 && (
                     <div className="col-span-full text-center text-gray-500 py-10">
@@ -177,6 +192,7 @@ export default function ProductList({ filters }: ProductListProps) {
                 )}
             </div>
 
+            {/* Pagination */}
             <div className="mt-10 flex justify-center">
                 <Pagination>
                     <PaginationContent>

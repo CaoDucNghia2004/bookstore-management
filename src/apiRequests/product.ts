@@ -1,5 +1,8 @@
 import http from "@/lib/http";
-import { ProductsResponseType } from "@/schemaValidations/product.schema";
+import {
+    ProductDetailResponseType,
+    ProductsResponseType,
+} from "@/schemaValidations/product.schema";
 
 const productApiRequests = {
     getProducts: (query = "") =>
@@ -8,6 +11,12 @@ const productApiRequests = {
         }),
     sGetProducts: (query = "") =>
         http.get<ProductsResponseType>(`/api/v1/products?${query}`),
+    getProductById: (id: number) =>
+        http.get<ProductDetailResponseType>(`/api/product/${id}`, {
+            baseUrl: "",
+        }),
+    sGetProductById: (id: number) =>
+        http.get<ProductDetailResponseType>(`/api/v1/products/${id}`),
 };
 
 export default productApiRequests;

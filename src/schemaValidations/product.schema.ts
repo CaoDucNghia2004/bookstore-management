@@ -52,5 +52,15 @@ export const ProductsResponseSchema = z.object({
     error: z.string().nullable().optional(),
 });
 
+export const ProductDetailResponseSchema = z.object({
+    status: z.number(),
+    message: z.string(),
+    data: ProductSchema,
+    error: z.string().nullable().optional(),
+});
+
 export type ProductType = z.infer<typeof ProductSchema>;
 export type ProductsResponseType = z.infer<typeof ProductsResponseSchema>;
+export type ProductDetailResponseType = z.infer<
+    typeof ProductDetailResponseSchema
+>;
