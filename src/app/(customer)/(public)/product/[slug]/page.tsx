@@ -82,9 +82,13 @@ export default function ProductDetailPage() {
                 quantity,
             },
             {
-                onSuccess: () => {
-                    toast.success("🛒 Sản phẩm đã được thêm vào giỏ hàng");
-                    router.push("/cart");
+                onSuccess: async () => {
+                    await refetchAccount();
+                    router.push("/order");
+                },
+                onError: (err) => {
+                    toast.error("❌ Không thể thêm sản phẩm vào giỏ hàng");
+                    console.error(err);
                 },
             }
         );
@@ -256,7 +260,11 @@ export default function ProductDetailPage() {
                             >
                                 <ShoppingCart size={20} /> Thêm vào giỏ hàng
                             </button>
-                            <button className="bg-red-500 text-white font-medium py-3 px-6 rounded-md hover:bg-red-600 transition">
+                            <button
+                                onClick={handleBuyNow}
+                                disabled={isAdding}
+                                className="bg-red-500 text-white font-medium py-3 px-6 rounded-md hover:bg-red-600 transition"
+                            >
                                 Mua ngay
                             </button>
                         </div>

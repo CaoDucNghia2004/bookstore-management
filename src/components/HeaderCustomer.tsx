@@ -20,11 +20,13 @@ import { useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useSearchStore } from "@/stores/search-store";
 import CartPopover from "./CartPopover";
+import ManageAccountModal from "./profile/ManageAccountModal";
 
 export default function HeaderCustomer() {
     const [searchValue, setSearchValue] = useState("");
     const [showSearch, setShowSearch] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [openProfileModal, setOpenProfileModal] = useState(false);
 
     const logoutMutation = useLogoutMutation();
 
@@ -120,7 +122,11 @@ export default function HeaderCustomer() {
                                 <button className="flex items-center gap-2 group focus:outline-none focus-visible:outline-none focus:ring-0">
                                     <Avatar className="w-9 h-9 md:h-15 md:w-15 border shadow-sm hover:scale-105 transition-transform">
                                         <AvatarImage
-                                            src={user.avatar || ""}
+                                            src={
+                                                user.avatar
+                                                    ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/storage/avatar/${user.avatar}`
+                                                    : ""
+                                            }
                                             alt={user.name}
                                         />
                                         <AvatarFallback className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg flex items-center justify-center">
@@ -173,18 +179,20 @@ export default function HeaderCustomer() {
                                 </>
                             ) : (
                                 <div className="flex flex-col text-sm text-gray-700">
-                                    <Link
-                                        href="/profile"
+                                    <button
+                                        onClick={() =>
+                                            setOpenProfileModal(true)
+                                        }
                                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                                     >
                                         <User className="w-4 h-4 text-blue-600" />
                                         <span className="font-semibold">
                                             Thông tin cá nhân
                                         </span>
-                                    </Link>
+                                    </button>
 
                                     <Link
-                                        href="/cart"
+                                        href="/order"
                                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                                     >
                                         <ShoppingCart className="w-4 h-4 text-blue-600" />
@@ -194,7 +202,7 @@ export default function HeaderCustomer() {
                                     </Link>
 
                                     <Link
-                                        href="/orders"
+                                        href="/history"
                                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                                     >
                                         <svg
@@ -266,6 +274,11 @@ export default function HeaderCustomer() {
                     </div>
                 </div>
             )}
+
+            <ManageAccountModal
+                open={openProfileModal}
+                onOpenChange={setOpenProfileModal}
+            />
         </header>
     );
 }

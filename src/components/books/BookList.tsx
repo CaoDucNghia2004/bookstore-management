@@ -14,6 +14,7 @@ import { ArrowDownUp, TrendingUp, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useProducts } from "@/queries/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProductType } from "@/schemaValidations/product.schema";
 
 interface ProductListProps {
     filters: {
@@ -59,7 +60,7 @@ export default function ProductList({ filters }: ProductListProps) {
     query += `&sort=${sortQuery}`;
 
     const { data, isLoading, isError, refetch } = useProducts(query);
-    const products = data?.payload?.data?.result || [];
+    const products = data?.payload.data.result || [];
     const meta = data?.payload?.data?.meta;
 
     useEffect(() => {
@@ -141,7 +142,7 @@ export default function ProductList({ filters }: ProductListProps) {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-                {products.map((product: any) => {
+                {products.map((product: ProductType) => {
                     const slug = createSlug(product.name);
                     const productUrl = `/product/${slug}?id=${product.id}`;
 
@@ -178,7 +179,7 @@ export default function ProductList({ filters }: ProductListProps) {
                                     {product.price?.toLocaleString()} ₫
                                 </p>
                                 <p className="text-xs sm:text-sm text-gray-500">
-                                    Đã bán {product.sold}
+                                    Đã bán {product.sold || 0}
                                 </p>
                             </div>
                         </Link>
