@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/profile"];
+const privatePaths = ["/history", "/order", "/cart"];
 const unAuthPaths = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
@@ -20,10 +20,6 @@ export async function middleware(request: NextRequest) {
             user = data?.data?.account || null;
             console.log("👤 User from middleware:", user);
         }
-        // console.log(
-        //     "Log user ra xem thư có data trong middleware hay không",
-        //     user
-        // );
     } catch (error) {
         console.error("❌ Middleware error:", error);
     }
@@ -44,5 +40,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/profile", "/login", "/register"],
+    matcher: ["/login", "/register"],
 };
