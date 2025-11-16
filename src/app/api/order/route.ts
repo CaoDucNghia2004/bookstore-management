@@ -20,8 +20,6 @@ export async function POST(req: Request) {
 
         return NextResponse.json(payload, { status });
     } catch (error) {
-        console.error("🔥 [API /order] Lỗi:", error);
-
         if (error instanceof HttpError) {
             return NextResponse.json(error.payload, { status: error.status });
         }

@@ -67,10 +67,10 @@ export default function CustomerInfoForm() {
                 },
             });
 
-            toast.success("✅ Cập nhật thông tin khách hàng thành công!");
+            toast.success("Cập nhật thông tin khách hàng thành công!");
         } catch (error: any) {
             toast.error(
-                error?.message || "❌ Cập nhật thất bại, vui lòng thử lại!"
+                error?.message || "Cập nhật thất bại, vui lòng thử lại!"
             );
         }
     };

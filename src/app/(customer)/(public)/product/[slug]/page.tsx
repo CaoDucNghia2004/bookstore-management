@@ -39,7 +39,7 @@ export default function ProductDetailPage() {
 
     const handleAddToCart = () => {
         if (!user) {
-            toast.warning("🪪 Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             router.push("/login");
             return;
         }
@@ -99,7 +99,7 @@ export default function ProductDetailPage() {
     if (isError || !product)
         return (
             <div className="text-center p-20 text-red-500">
-                Không thể tải thông tin sản phẩm 😢
+                Không thể tải thông tin sản phẩm
             </div>
         );
 

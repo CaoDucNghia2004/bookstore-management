@@ -1,14 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { cartApiRequests } from "@/apiRequests/cart";
 import { HttpError } from "@/lib/http";
 
 export async function DELETE(
-    req: Request,
-    { params }: { params: { id: string } }
+    request: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const cartItemId = Number(params.id);
+        const { id } = await context.params;
+        const cartItemId = Number(id);
+
         if (!cartItemId) {
             return NextResponse.json(
                 { message: "❌ ID không hợp lệ" },
@@ -29,12 +31,13 @@ export async function DELETE(
                 },
             }
         );
+
         return NextResponse.json(payload, { status });
     } catch (error) {
-        console.error("🔥 [API /cart/delete/:id] Lỗi:", error);
         if (error instanceof HttpError) {
             return NextResponse.json(error.payload, { status: error.status });
         }
+
         return NextResponse.json(
             { message: "Lỗi server khi xóa sản phẩm khỏi giỏ hàng" },
             { status: 500 }

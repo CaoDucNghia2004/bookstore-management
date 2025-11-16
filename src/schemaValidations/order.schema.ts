@@ -68,12 +68,16 @@ export const ProductSchema = z.object({
     name: z.string(),
     author: z.string().nullable().optional(),
     price: z.number(),
+    thumbnail: z.string().nullable().optional(),
 });
 
 export const OrderItemSchema = z.object({
     id: z.number(),
     quantity: z.number(),
     price: z.number(),
+    totalPrice: z.number(),
+    capitalPrice: z.number(),
+    totalCapitalPrice: z.number(),
     returnQty: z.number().optional().default(0),
     product: ProductSchema,
 });
@@ -120,9 +124,9 @@ export const PromotionSchema = z
 
 export const CustomerSchema = z.object({
     id: z.number(),
-    name: z.string(),
-    phone: z.string(),
-    email: z.string(),
+    name: z.string().nullable(),
+    phone: z.string().nullable(),
+    email: z.string().nullable(),
 });
 
 /* ======================

@@ -89,7 +89,7 @@ export default function ProductList({ filters }: ProductListProps) {
     if (isError)
         return (
             <div className="text-center text-red-500 p-10">
-                Lỗi khi tải dữ liệu 😢
+                Lỗi khi tải dữ liệu...
             </div>
         );
 
@@ -193,7 +193,6 @@ export default function ProductList({ filters }: ProductListProps) {
                 )}
             </div>
 
-            {/* Pagination */}
             <div className="mt-10 flex justify-center">
                 <Pagination>
                     <PaginationContent>

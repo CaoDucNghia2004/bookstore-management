@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { accountApiRequests } from "@/apiRequests/account";
 import { UpdateAccountBodyType } from "@/schemaValidations/account.schema";
 import { ChangePasswordBodyType } from "@/schemaValidations/changePassword.schema";
-import { toast } from "sonner";
 
 export const useUpdateAccount = () => {
     return useMutation({

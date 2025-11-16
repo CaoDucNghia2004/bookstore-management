@@ -10,6 +10,7 @@ import { useUploadAvatar } from "@/queries/useUploadAvatar";
 import { useUserStore } from "@/stores/user-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUpdateAccount } from "@/queries/useAccount";
+import { useAccountQuery } from "@/queries/useAuth";
 
 export default function UserInfoForm() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -23,6 +24,7 @@ export default function UserInfoForm() {
 
     const { mutate: uploadAvatar, isPending } = useUploadAvatar();
     const { mutate: updateAccount, isPending: isUpdating } = useUpdateAccount();
+    const { refetch: refetchAccount } = useAccountQuery();
 
     useEffect(() => {
         if (tempAvatar) {
@@ -58,7 +60,7 @@ export default function UserInfoForm() {
         uploadAvatar(file, {
             onSuccess: (res) => {
                 const fileName = res?.payload?.data?.fileName;
-                toast.success("✅ Ảnh đại diện đã được tải lên thành công!");
+                toast.success("Ảnh đại diện đã được tải lên thành công!");
                 setTempAvatar(fileName);
                 URL.revokeObjectURL(previewUrl);
             },
@@ -95,7 +97,16 @@ export default function UserInfoForm() {
             avatar: tempAvatar || user.avatar || null,
         };
 
-        updateAccount(body);
+        updateAccount(body, {
+            onSuccess: async () => {
+                toast.success("Cập nhật tài khoản thành công!");
+
+                await refetchAccount();
+            },
+            onError: () => {
+                toast.error("Cập nhật thất bại, vui lòng thử lại!");
+            },
+        });
     };
 
     return (

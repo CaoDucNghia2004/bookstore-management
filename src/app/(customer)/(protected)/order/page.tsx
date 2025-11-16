@@ -19,7 +19,7 @@ export default function OrderPage() {
     const [step, setStep] = useState(1); //  1: giỏ hàng, 2: đặt hàng, 3: thanh toán
 
     if (!user) {
-        toast.warning("🪪 Bạn cần đăng nhập để xem giỏ hàng");
+        toast.warning("Bạn cần đăng nhập để xem giỏ hàng");
         return null;
     }
 
@@ -129,7 +129,7 @@ export default function OrderPage() {
 
                     {cartItems.length === 0 ? (
                         <div className="text-center text-gray-500 py-16">
-                            Giỏ hàng trống 😢
+                            Giỏ hàng trống ...
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4">
@@ -237,7 +237,7 @@ export default function OrderPage() {
                     ) : (
                         <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center sticky top-10">
                             <h3 className="text-xl font-semibold text-green-700 mb-2">
-                                ✅ Thanh toán thành công!
+                                Thanh toán thành công!
                             </h3>
                             <p className="text-gray-600 mb-4">
                                 Cảm ơn bạn đã mua hàng. Đơn hàng của bạn sẽ sớm

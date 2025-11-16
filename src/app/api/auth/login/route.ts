@@ -11,6 +11,17 @@ export async function POST(request: Request) {
         const body = (await request.json()) as LoginBodyType;
         const { status, payload, headers } = await authApiRequest.sLogin(body);
 
+        // Chặn ADMIN đăng nhập vào web NextJS
+        if (payload?.data?.account?.role === "ADMIN") {
+            return NextResponse.json(
+                {
+                    message:
+                        "Tài khoản ADMIN không được phép đăng nhập vào hệ thống này.",
+                },
+                { status: 403 }
+            );
+        }
+
         const accessToken = payload?.data?.access_token;
         const decodeAccessToken = jwt.decode(accessToken) as { exp: number };
 
@@ -28,6 +39,7 @@ export async function POST(request: Request) {
             httpOnly: true,
             sameSite: "lax",
             secure: true,
+            // secure: false,
             expires: decodeAccessToken.exp * 1000,
         });
 

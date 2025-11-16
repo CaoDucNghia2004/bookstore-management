@@ -17,6 +17,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { getStatusColor, getStatusLabel } from "@/lib/utils";
 
 export default function OrderHistoryPage() {
     const { user } = useUserStore();
@@ -116,14 +117,11 @@ export default function OrderHistoryPage() {
                                     </td>
                                     <td className="p-3">
                                         <span
-                                            className={`px-2 py-1 text-xs font-medium rounded-md ${
-                                                order.status === "cancelled" ||
-                                                order.status === "đã hủy"
-                                                    ? "border border-red-300 text-red-600 bg-red-50"
-                                                    : "border border-blue-300 text-blue-600 bg-blue-50"
-                                            }`}
+                                            className={`px-2 py-1 text-xs font-medium rounded-md ${getStatusColor(
+                                                order.status
+                                            )}`}
                                         >
-                                            {order.status}
+                                            {getStatusLabel(order.status)}
                                         </span>
                                     </td>
                                     <td className="p-3">
@@ -143,48 +141,47 @@ export default function OrderHistoryPage() {
                                             <EyeIcon className="w-5 h-5 text-blue-600 hover:text-blue-800" />
                                         </button>
 
-                                        {order.status !== "canceled" &&
-                                            order.status !== "Đã hủy" && (
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <button
-                                                            title="Hủy đơn hàng"
-                                                            disabled={
-                                                                cancelOrderMutation.isPending
+                                        {order.status === "wait_confirm" && (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <button
+                                                        title="Hủy đơn hàng"
+                                                        disabled={
+                                                            cancelOrderMutation.isPending
+                                                        }
+                                                    >
+                                                        <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-700" />
+                                                    </button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Xác nhận hủy đơn
+                                                            hàng
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Bạn có chắc chắn
+                                                            muốn hủy đơn hàng
+                                                            này không?
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Hủy
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                handleCancelConfirm(
+                                                                    order.id
+                                                                )
                                                             }
                                                         >
-                                                            <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-700" />
-                                                        </button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>
-                                                                Xác nhận hủy đơn
-                                                                hàng
-                                                            </AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                Bạn có chắc chắn
-                                                                muốn hủy đơn
-                                                                hàng này không?
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>
-                                                                Hủy
-                                                            </AlertDialogCancel>
-                                                            <AlertDialogAction
-                                                                onClick={() =>
-                                                                    handleCancelConfirm(
-                                                                        order.id
-                                                                    )
-                                                                }
-                                                            >
-                                                                Xác nhận
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            )}
+                                                            Xác nhận
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

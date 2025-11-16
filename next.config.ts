@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
                 port: "8080",
                 pathname: "/storage/product/**",
             },
+            {
+                protocol: "http",
+                hostname: "thebookheaven.io.vn",
+                pathname: "/storage/product/**",
+            },
         ],
     },
     eslint: {

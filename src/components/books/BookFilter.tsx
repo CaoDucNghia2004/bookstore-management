@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCategories } from "@/queries/useCategories";
-import { Filter, DollarSign, Star } from "lucide-react";
+import { Filter, DollarSign, Star, RotateCcw } from "lucide-react";
 
 interface ProductFilterProps {
     onFilterChange: React.Dispatch<
@@ -24,12 +24,7 @@ export function ProductFilter({ onFilterChange }: ProductFilterProps) {
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
 
-    if (isLoading)
-        return (
-            <aside className="bg-white p-4 text-center rounded-xl shadow-sm">
-                Đang tải danh mục...
-            </aside>
-        );
+    if (isLoading) return null;
 
     if (error)
         return (
@@ -62,13 +57,34 @@ export function ProductFilter({ onFilterChange }: ProductFilterProps) {
         }));
     };
 
+    const resetFilter = () => {
+        setSelectedCategories([]);
+        setMinPrice("");
+        setMaxPrice("");
+
+        onFilterChange({
+            filter: {
+                category: [],
+                price_min: undefined,
+                price_max: undefined,
+            },
+        });
+    };
+
     return (
         <aside className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 w-full max-w-sm  md:max-w-[290px]">
-            <div className="flex items-center gap-2 mb-5 border-b border-gray-100 pb-3">
+            <div className="flex items-center justify-between gap-2 mb-5 border-b border-gray-100 pb-3">
                 <Filter className="w-5 h-5 text-blue-600" />
-                <h2 className="text-base font-semibold text-gray-800">
+                <h2 className="text-base font-semibold text-gray-800 mr-16">
                     Bộ lọc sản phẩm
                 </h2>
+                <button
+                    onClick={resetFilter}
+                    title="Xóa tất cả bộ lọc"
+                    className="p-1 rounded-md hover:bg-gray-100 transition"
+                >
+                    <RotateCcw className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+                </button>
             </div>
 
             <div className="space-y-6 text-sm">
