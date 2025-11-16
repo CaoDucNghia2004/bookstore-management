@@ -110,7 +110,7 @@ export default function HeaderCustomer() {
                     </button>
 
                     <Link
-                        href="#"
+                        href="/order"
                         className="relative flex flex-col items-center group transition-colors duration-200"
                     >
                         <CartPopover />

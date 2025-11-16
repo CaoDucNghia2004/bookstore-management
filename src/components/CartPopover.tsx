@@ -38,10 +38,10 @@ export default function CartPopover() {
         >
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    <div className="flex flex-col items-center cursor-pointer group">
+                    <div className="flex flex-col items-center cursor-pointer group mb-3.5">
                         <div className="relative p-2 rounded-lg hover:bg-gray-100 transition">
                             <ShoppingCart
-                                size={26}
+                                size={25}
                                 className="text-gray-700 group-hover:text-blue-600 transition-colors"
                             />
                             {cartItems.length > 0 && (
@@ -50,7 +50,7 @@ export default function CartPopover() {
                                 </span>
                             )}
                         </div>
-                        <span className="hidden sm:block text-sm font-medium mt-1 mr-1 group-hover:text-blue-600 transition-colors">
+                        <span className="hidden sm:block text-sm font-medium  mr-1 group-hover:text-blue-600 transition-colors">
                             Giỏ hàng
                         </span>
                     </div>

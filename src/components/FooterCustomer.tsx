@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
@@ -174,14 +172,15 @@ export default function FooterCustomer() {
                     <p>
                         © {new Date().getFullYear()}{" "}
                         <span className="text-blue-600 font-semibold">
-                            BookStore
+                            The Book Heaven
                         </span>{" "}
-                        - Bản quyền thuộc về BookStore. Mọi quyền được bảo lưu.
+                        - Bản quyền thuộc về The Book Heaven . Mọi quyền được
+                        bảo lưu.
                     </p>
                     <p className="mt-2 sm:mt-0">
                         Thiết kế với ❤️ bởi{" "}
                         <span className="text-blue-600 font-semibold">
-                            Đội ngũ BookStore
+                            Đội ngũ The Book Heaven
                         </span>
                     </p>
                 </div>

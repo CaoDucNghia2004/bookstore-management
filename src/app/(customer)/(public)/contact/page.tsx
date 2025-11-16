@@ -1,3 +1,11 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Liên hệ với The Book Heaven | Hỗ trợ khách hàng",
+    description:
+        "Liên hệ The Book Heaven để được hỗ trợ. Địa chỉ: 49 Nguyễn Đỗ Cung, TP.HCM. Điện thoại: 0867 173 946",
+};
+
 const ContactPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-blue-50">
