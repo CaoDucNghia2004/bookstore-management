@@ -2,6 +2,8 @@ import z from "zod";
 
 export const ProductSchema = z.object({
     id: z.number(),
+    barcode: z.string(),
+    capitalPrice: z.number(),
     thumbnail: z.string(),
     name: z.string(),
     author: z.string(),
@@ -90,6 +92,9 @@ const OrderItemSchema = z.object({
     id: z.number(),
     quantity: z.number(),
     price: z.number(),
+    capitalPrice: z.number(),
+    totalPrice: z.number(),
+    totalCapitalPrice: z.number(),
     returnQty: z.number(),
     product: ProductSchema,
 });
@@ -121,6 +126,7 @@ const OrderSchema = z.object({
     orderItems: z.array(OrderItemSchema),
     orderShippingEvents: z.array(OrderShippingEventSchema),
     promotion: PromotionSchema,
+    note: z.string(),
 });
 
 const CustomerSchema = z.object({
@@ -158,7 +164,7 @@ export const AccountRes = z.object({
     data: z.object({
         account: AccountSchema,
     }),
-    error: z.string().optional(),
+    error: z.string().optional().nullable(),
 });
 
 export type AccountResType = z.TypeOf<typeof AccountRes>;
@@ -186,7 +192,7 @@ export const LoginRes = z.object({
         account: AccountSchema,
         access_token: z.string(),
     }),
-    error: z.string(),
+    error: z.string().optional().nullable(),
 });
 
 export type LoginResType = z.TypeOf<typeof LoginRes>;
@@ -228,7 +234,7 @@ export const RegisterRes = z.object({
         username: z.string(),
         createdAt: z.string(),
     }),
-    error: z.string(),
+    error: z.string().optional().nullable(),
 });
 
 export type RegisterResType = z.TypeOf<typeof RegisterRes>;
@@ -244,3 +250,20 @@ export const RefreshResSchema = z.object({
 });
 
 export type RefreshResType = z.infer<typeof RefreshResSchema>;
+
+export const LoginGoogleBody = z.object({
+    idToken: z.string().nonempty("idToken là bắt buộc"),
+});
+export type LoginGoogleBodyType = z.TypeOf<typeof LoginGoogleBody>;
+
+export const LoginGoogleRes = z.object({
+    status: z.number(),
+    message: z.string(),
+    data: z.object({
+        account: AccountSchema,
+        access_token: z.string(),
+    }),
+    error: z.string().optional().nullable(),
+});
+
+export type LoginGoogleResType = z.TypeOf<typeof LoginGoogleRes>;

@@ -2,6 +2,8 @@ import http from "@/lib/http";
 import {
     AccountResType,
     LoginBodyType,
+    LoginGoogleBodyType,
+    LoginGoogleResType,
     LoginResType,
     RefreshResType,
     RegisterBodyType,
@@ -24,11 +26,11 @@ const authApiRequest = {
     account: () =>
         http.get<AccountResType>("/api/auth/account", {
             baseUrl: "",
-            headers: {
-                Authorization: `Bearer ${
-                    localStorage.getItem("access_token") || ""
-                }`,
-            },
+            // headers: {
+            //     Authorization: `Bearer ${
+            //         localStorage.getItem("access_token") || ""
+            //     }`,
+            // },
         }),
     sAccount: (options?: any) =>
         http.get<AccountResType>("/api/v1/auth/account", options),
@@ -43,6 +45,18 @@ const authApiRequest = {
     sLogout: (options?: any) => http.post("/api/v1/auth/logout", {}, options),
     sRefresh: (options?: any) =>
         http.get<RefreshResType>("/api/v1/auth/refresh", options),
+
+    loginGoogle: (body: LoginGoogleBodyType) =>
+        http.post<LoginGoogleResType>("/api/auth/login-google", body, {
+            baseUrl: "",
+        }),
+
+    sLoginGoogle: (body: LoginGoogleBodyType, options?: any) =>
+        http.post<LoginGoogleResType>(
+            "/api/v1/auth/loginWithGoogle",
+            body,
+            options
+        ),
 };
 
 export default authApiRequest;

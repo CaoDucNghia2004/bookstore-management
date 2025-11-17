@@ -28,13 +28,16 @@ import {
 import { BookOpen, Sparkles, Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 
-import { useLoginMutation } from "@/queries/useAuth";
+import { useLoginGoogleMutation, useLoginMutation } from "@/queries/useAuth";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginWithGoogle } from "@/lib/googleLogin";
 
 export default function LoginForm() {
     const router = useRouter();
+
     const loginMutation = useLoginMutation();
+    const googleLoginMutation = useLoginGoogleMutation();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -51,7 +54,7 @@ export default function LoginForm() {
         try {
             const result = await loginMutation.mutateAsync(data);
             toast.success(result.payload.message || "Đăng nhập thành công!");
-            router.push("/");
+            // router.push("/");
         } catch (error: any) {
             console.log("Login error:", error);
             toast.error(
@@ -59,6 +62,22 @@ export default function LoginForm() {
                     ? "Tài khoản hoặc mật khẩu không đúng!"
                     : error?.message || "Đăng nhập thất bại. Vui lòng thử lại."
             );
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            // Lấy idToken từ Firebase
+            const { idToken } = await loginWithGoogle();
+            console.log("Google ID Token:", idToken);
+            console.log("Token length:", idToken.length);
+
+            // Gửi token lên backend
+            await googleLoginMutation.mutateAsync({ idToken });
+
+            toast.success("Đăng nhập Google thành công!");
+        } catch (error) {
+            toast.error("Đăng nhập Google thất bại!");
         }
     };
 
@@ -180,7 +199,7 @@ export default function LoginForm() {
                 <Button
                     variant="outline"
                     className="w-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 flex items-center justify-center gap-2 transition-all duration-200"
-                    onClick={() => console.log("Login with Google")}
+                    onClick={handleGoogleLogin}
                 >
                     <FcGoogle className="w-5 h-5" />
                     Đăng nhập với Google

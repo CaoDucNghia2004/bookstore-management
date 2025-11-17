@@ -1,6 +1,9 @@
 import envConfig from "@/config";
 import { normalizePath } from "@/lib/utils";
-import { LoginResType } from "@/schemaValidations/auth.schema";
+import {
+    LoginGoogleResType,
+    LoginResType,
+} from "@/schemaValidations/auth.schema";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
     baseUrl?: string;
@@ -150,7 +153,11 @@ const request = async <T>(
             localStorage.setItem("access_token", access_token);
         }
 
-        // Nếu logout → xoá access_token
+        if (normalizedUrl === "api/auth/login-google") {
+            const { access_token } = (payload as LoginGoogleResType).data;
+            localStorage.setItem("access_token", access_token);
+        }
+
         if (normalizedUrl === "api/auth/logout") {
             localStorage.removeItem("access_token");
         }

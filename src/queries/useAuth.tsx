@@ -1,11 +1,13 @@
 import authApiRequest from "@/apiRequests/auth";
 import {
     LoginBodyType,
+    LoginGoogleBodyType,
     RegisterBodyType,
 } from "@/schemaValidations/auth.schema";
 import { useUserStore } from "@/stores/user-store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const useRegisterMutation = () => {
     return useMutation({
@@ -20,7 +22,10 @@ export const useLoginMutation = () => {
     return useMutation({
         mutationFn: (body: LoginBodyType) => authApiRequest.login(body),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ["account"] });
+            // await queryClient.invalidateQueries({ queryKey: ["account"] });
+            await queryClient.refetchQueries({
+                queryKey: ["account"],
+            });
             router.push("/");
         },
     });
@@ -48,9 +53,28 @@ export const useLogoutMutation = () => {
                 "access_token=; Path=/; Max-Age=0; SameSite=Lax; Secure";
 
             clearUser();
-            await queryClient.removeQueries({ queryKey: ["account"] });
+            // await queryClient.removeQueries({ queryKey: ["account"] });
+            await queryClient.invalidateQueries({ queryKey: ["account"] });
             router.push("/login");
         },
-        onError: (error) => console.error("❌ Logout failed:", error),
+        onError: (error) => console.error("Logout failed:", error),
+    });
+};
+
+export const useLoginGoogleMutation = () => {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    return useMutation({
+        mutationFn: (body: LoginGoogleBodyType) =>
+            authApiRequest.loginGoogle(body),
+
+        onSuccess: async () => {
+            // await queryClient.invalidateQueries({ queryKey: ["account"] });
+            await queryClient.refetchQueries({
+                queryKey: ["account"],
+            });
+            router.push("/");
+        },
     });
 };
