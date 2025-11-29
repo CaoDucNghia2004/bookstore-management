@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const privatePaths = ["/history", "/order", "/cart"];
-const unAuthPaths = ["/login", "/register", "/contact"];
+const unAuthPaths = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -50,7 +50,6 @@ export const config = {
         "/cart/:path*",
         "/login",
         "/register",
-        "/contact",
     ],
 };
 
